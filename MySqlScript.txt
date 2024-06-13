@@ -1,0 +1,58 @@
+﻿CREATE TABLE Employees (
+	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	full_name VARCHAR(150) NOT NULL,
+	subdivision enum('Admin', 'HR', 'Dev', 'Sales') NOT NULL,
+	position enum('Administrator', 'HR Manager', 'Developer', 'Marketer') NOT NULL,
+	status enum('Active','Inactive') NOT NULL,
+	people_partner int NOT NULL,
+	3ob int NOT NULL,
+	picture MEDIUMBLOB,
+    FOREIGN KEY (people_partner) REFERENCES Employees(id)
+);
+CREATE TABLE Projects (
+	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	type enum('SalesPitch', 'CompanyPR', 'AppDevelopmnet') NOT NULL,
+	start_date date NOT NULL,
+	end_date date,
+	manager int NOT NULL,
+    comment TEXT,
+	status enum('Active','Inactive') NOT NULL,
+    FOREIGN KEY (manager) REFERENCES Employees(id)
+);
+CREATE TABLE EmployeeProjectRelations(
+	employeeId int,
+	projectId int,
+    FOREIGN KEY (EmployeeId) REFERENCES Employees(id),
+    FOREIGN KEY (projectId) REFERENCES Projects(id)
+);
+
+CREATE TABLE LeaveRequest (
+	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	employee int NOT NULL,
+	absence_reason enum('Ilness', 'Holyday', 'Other') NOT NULL,
+	start_date date NOT NULL,
+	end_date date NOT NULL,
+    comment TEXT,
+	status enum('Submitted', 'Canceled', 'Rejected', 'Accepted') NOT NULL,
+    FOREIGN KEY (employee) REFERENCES Employees(id)
+);
+CREATE TABLE ApprovalRequest (
+	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	approver int NOT NULL,
+	leave_request int NOT NULL,
+	status enum('Rejected', 'Accepted') NOT NULL,
+    comment TEXT,
+    FOREIGN KEY (approver) REFERENCES Employees(id),
+    FOREIGN KEY (leave_request) REFERENCES LeaveRequest(id)
+);
+
+CREATE TABLE Credentials (
+	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    login varchar(150),
+    password varchar(255),
+    current_salt char(20),
+    access_level enum('base', 'HRmanagement', 'Pmanagement', 'full')
+);
+
+INSERT INTO `credentials` (`id`, `login`, `password`, `current_salt`, `access_level`) VALUES
+(1, 'admin', '0F2FD52805592D291CE45E932F85176274B003F8D1B9F297274F4326E9F40580', 'k!xkzf>odaaab<%m),o1', 'full');

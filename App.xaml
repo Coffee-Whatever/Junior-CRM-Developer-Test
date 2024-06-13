@@ -4,12 +4,15 @@
              xmlns:local="clr-namespace:Junior_CRM_Developer_Test"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <!--
         <Color x:Key="TextColour">#e4e1f2</Color>
         <Color x:Key="BackColour">#04020c</Color>
         <Color x:Key="PrimaryColour">#262b4f</Color>
         <Color x:Key="SecondaryColour">#362289</Color>
         <Color x:Key="AccentColour">#5d3dd9</Color>
+        -->
         <SolidColorBrush x:Key="TextBrush">#e4e1f2</SolidColorBrush>
+        <SolidColorBrush x:Key="TextHighlightBrush">#000</SolidColorBrush>
         <SolidColorBrush x:Key="BackBrush">#04020c</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryBrush">#262b4f</SolidColorBrush>
         <SolidColorBrush x:Key="SecondaryBrush">#362289</SolidColorBrush>
