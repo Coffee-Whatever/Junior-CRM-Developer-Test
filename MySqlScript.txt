@@ -3,7 +3,7 @@
 	full_name VARCHAR(150) NOT NULL,
 	subdivision enum('Admin', 'HR', 'Dev', 'Sales') NOT NULL,
 	position enum('Administrator', 'HR Manager', 'Developer', 'Marketer') NOT NULL,
-	status enum('Active','Inactive') NOT NULL,
+	status enum('Active','Inactive') NOT NULL DEFAULT 'Active',
 	people_partner int NOT NULL,
 	3ob int NOT NULL,
 	picture MEDIUMBLOB,
@@ -16,7 +16,7 @@ CREATE TABLE Projects (
 	end_date date,
 	manager int NOT NULL,
     comment TEXT,
-	status enum('Active','Inactive') NOT NULL,
+	status enum('Active','Inactive') NOT NULL DEFAULT 'Active',
     FOREIGN KEY (manager) REFERENCES Employees(id)
 );
 CREATE TABLE EmployeeProjectRelations(
@@ -29,18 +29,18 @@ CREATE TABLE EmployeeProjectRelations(
 CREATE TABLE LeaveRequest (
 	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	employee int NOT NULL,
-	absence_reason enum('Ilness', 'Holyday', 'Other') NOT NULL,
+	absence_reason enum('Illness', 'Holyday', 'Other') NOT NULL,
 	start_date date NOT NULL,
 	end_date date NOT NULL,
     comment TEXT,
-	status enum('Submitted', 'Canceled', 'Rejected', 'Accepted') NOT NULL,
+	status enum('New', 'Submitted', 'Cancelled', 'Rejected', 'Accepted') NOT NULL DEFAULT 'New',
     FOREIGN KEY (employee) REFERENCES Employees(id)
 );
 CREATE TABLE ApprovalRequest (
 	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	approver int NOT NULL,
 	leave_request int NOT NULL,
-	status enum('Rejected', 'Accepted') NOT NULL,
+	status enum('New', 'Rejected', 'Accepted') NOT NULL DEFAULT 'New',
     comment TEXT,
     FOREIGN KEY (approver) REFERENCES Employees(id),
     FOREIGN KEY (leave_request) REFERENCES LeaveRequest(id)
@@ -48,11 +48,25 @@ CREATE TABLE ApprovalRequest (
 
 CREATE TABLE Credentials (
 	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	employee_id int UNIQUE,
     login varchar(150),
     password varchar(255),
     current_salt char(20),
-    access_level enum('base', 'HRmanagement', 'Pmanagement', 'full')
+    access_level enum('base', 'HRmanagement', 'Pmanagement', 'full') DEFAULT 'base',
+	FOREIGN KEY (employee_id) REFERENCES Employees(id)
 );
 
-INSERT INTO `credentials` (`id`, `login`, `password`, `current_salt`, `access_level`) VALUES
-(1, 'admin', '0F2FD52805592D291CE45E932F85176274B003F8D1B9F297274F4326E9F40580', 'k!xkzf>odaaab<%m),o1', 'full');
+INSERT INTO Employees VALUES
+(1, 'Patryk Klimkiewicz', 'Admin', 'Administrator', 'Active', 1, 26, '');
+
+INSERT INTO `credentials` VALUES
+(1, 1, 'admin', '0F2FD52805592D291CE45E932F85176274B003F8D1B9F297274F4326E9F40580', 'k!xkzf>odaaab<%m),o1', 'full');
+
+INSERT INTO `projects`(`id`, `type`, `start_date`, `end_date`, `manager`, `comment`, `status`) VALUES
+(1,'AppDevelopmnet', "2024-06-13", "", 1, 'TestApp','Active');
+
+INSERT INTO `employeeprojectrelations`(`employeeId`, `projectId`)
+VALUES (1,1);
+
+INSERT INTO `leaverequest`(`employee`, `absence_reason`, `start_date`, `end_date`, `comment`) VALUES 
+(1, 'Holyday','2024-12-24','2025-01-02','Newyears and Christmas leave');

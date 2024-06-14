@@ -15,7 +15,7 @@
         <SolidColorBrush x:Key="TextHighlightBrush">#000</SolidColorBrush>
         <SolidColorBrush x:Key="BackBrush">#04020c</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryBrush">#262b4f</SolidColorBrush>
-        <SolidColorBrush x:Key="SecondaryBrush">#362289</SolidColorBrush>
-        <SolidColorBrush x:Key="AccentBrush">#5d3dd9</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryBrush">#5a3bdb</SolidColorBrush>
+        <SolidColorBrush x:Key="AccentBrush">#3300fc</SolidColorBrush>
     </Application.Resources>
 </Application>

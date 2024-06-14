@@ -19,58 +19,108 @@ namespace Junior_CRM_Developer_Test
         {
             string log = login.Text;
             string salt = "";
-            try
-            {
-                string connetionstring = "Server=localhost;Database=crmtest;Uid=root;";
-                MySqlConnection conn = new MySqlConnection(connetionstring);
-                conn.Open();
+            DataTable dtable;
+            string query = "";
+            (bool, DataTable) Qresult;
 
-                string query = $"SELECT current_salt FROM `credentials` WHERE login = \"{log}\";";
+            query = $"SELECT current_salt FROM `credentials` WHERE login = \"{log}\";";
+            Qresult = DBQuery(query);
 
-                MySqlDataAdapter dtb = new MySqlDataAdapter();
-                dtb.SelectCommand = new MySqlCommand(query, conn);
-                DataTable dtable = new DataTable();
-                dtb.Fill(dtable);
-                salt = dtable.Rows[0].ItemArray[0].ToString();
-            }
-            catch (Exception ex)
+            if(Qresult.Item1)
             {
                 MessageBox.Show("Incorrect login or password");
+                return;
             }
+
+            dtable = Qresult.Item2;
+            salt = dtable.Rows[0].ItemArray[0].ToString();
 
             string pass = GetHashString(password.Password, salt);
+
+            query = $"SELECT CASE `password` WHEN '{pass}' THEN 1 ELSE 0 END isCorrect FROM `credentials` WHERE login = \"{log}\";";
+            Qresult = DBQuery(query);
+            if(Qresult.Item1) 
+            {
+                MessageBox.Show("Incorrect login or password");
+                return;
+            }
+
+            dtable = Qresult.Item2;
+
+            if (dtable.Rows[0].ItemArray[0].ToString() == "0")
+            {
+                MessageBox.Show("Incorrect login or password");
+                return;
+            }
+            query = $"SELECT access_level, employee_id FROM `credentials` WHERE login = \"{log}\";";
+
+            Qresult = DBQuery(query);
+            if(Qresult.Item1)
+            {
+                MessageBox.Show("Sorry, something went wrong during credentials gathering.\nPlease contact the app administrtor");
+                return;
+            }
+            dtable = Qresult.Item2;
+
+            string access = dtable.Rows[0].ItemArray[0].ToString();
+            switch (access)
+            {
+                case "base":
+                    {
+                        BaseUser window = new BaseUser(Convert.ToInt32(dtable.Rows[0].ItemArray[1]));
+                        window.ShowActivated = true;
+                        window.Closing += (object sender, CancelEventArgs e) =>
+                        {
+                            this.Show();
+                        };
+                        window.Show();
+
+                        this.Hide();
+                    }
+                    break;
+                case "HRmanagement":
+                    {
+
+                    }
+                    break;
+                case "Pmanagement":
+                    {
+
+                    }
+                    break;
+                case "full":
+                    {
+                        BaseUser window = new BaseUser(Convert.ToInt32(dtable.Rows[0].ItemArray[1]));
+                        window.ShowActivated = true;
+                        window.Closing += (object sender, CancelEventArgs e) =>
+                        {
+                            this.Show();
+                        };
+                        window.Show();
+
+                        this.Hide();
+                    }
+                    break;
+            }
+        }
+
+        public static (bool, DataTable) DBQuery(string query)
+        {
+            // (didErrorHappen, ResultIfNoError)
             try
             {
-                string connetionstring = "Server=localhost;Database=crmtest;Uid=root;";
+                string connetionstring = "Server=localhost;Database=crmtest;Uid=root;Convert Zero Datetime=True";
                 MySqlConnection conn = new MySqlConnection(connetionstring);
                 conn.Open();
-
-                string query = $"SELECT CASE `password` WHEN '{pass}' THEN 1 ELSE 0 END isCorrect FROM `credentials` WHERE login = \"{log}\";";
 
                 MySqlDataAdapter dtb = new MySqlDataAdapter();
                 dtb.SelectCommand = new MySqlCommand(query, conn);
                 DataTable dtable = new DataTable();
                 dtb.Fill(dtable);
-                if (dtable.Rows[0].ItemArray[0].ToString() == "0")
-                {
-                    MessageBox.Show("Incorrect login or password");
-                }
-                else
-                {
-                    Menu menu = new Menu(log);
-                    menu.ShowActivated = true;
-                    menu.Closing += (object sender, CancelEventArgs e) =>
-                    {
-                        this.Show();
-                    };
-                    menu.Show();
-
-                    this.Hide();
-                }
-            }
-            catch (Exception ex)
+                return (false, dtable);
+            }catch (Exception ex)
             {
-                MessageBox.Show("Incorrect login or password");
+                return (true, new DataTable());
             }
         }
         private static byte[] GetHash(string inputString)
