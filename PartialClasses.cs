@@ -11,8 +11,8 @@ namespace Junior_CRM_Developer_Test
     public partial class Project : ObservableObject
     {
         public string? _Type { get; set; }
-        public DateOnly? _StartDate { get; set; }
-        public DateOnly? _EndDate { get; set; }
+        public DateTime? _StartDate { get; set; }
+        public DateTime? _EndDate { get; set; }
         public string? _Manager { get; set; }
         public string? _Status { get; set; }
         public string? _Comment { get; set; }
@@ -21,8 +21,8 @@ namespace Junior_CRM_Developer_Test
     {
         public int Id { get; set; }
         public string? _Reason { get; set; }
-        public DateOnly? _StartDate { get; set; }
-        public DateOnly? _EndDate { get; set; }
+        public DateTime? _StartDate { get; set; }
+        public DateTime? _EndDate { get; set; }
         public string? _Comment { get; set; }
         public string? _Status { get; set; }
     }

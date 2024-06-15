@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Security.Cryptography;
 using System.Windows.Documents.Serialization;
 using System.ComponentModel;
+using Junior_CRM_Developer_Test.Admin;
 
 namespace Junior_CRM_Developer_Test
 {
@@ -26,7 +27,7 @@ namespace Junior_CRM_Developer_Test
             query = $"SELECT current_salt FROM `credentials` WHERE login = \"{log}\";";
             Qresult = DBQuery(query);
 
-            if(Qresult.Item1)
+            if(Qresult.Item1 || Qresult.Item2.Rows.Count == 0)
             {
                 MessageBox.Show("Incorrect login or password");
                 return;
@@ -72,6 +73,7 @@ namespace Junior_CRM_Developer_Test
                         window.Closing += (object sender, CancelEventArgs e) =>
                         {
                             this.Show();
+                            this.Activate();
                         };
                         window.Show();
 
@@ -90,11 +92,12 @@ namespace Junior_CRM_Developer_Test
                     break;
                 case "full":
                     {
-                        BaseUser window = new BaseUser(Convert.ToInt32(dtable.Rows[0].ItemArray[1]));
+                        AddCredentials window = new AddCredentials();
                         window.ShowActivated = true;
                         window.Closing += (object sender, CancelEventArgs e) =>
                         {
                             this.Show();
+                            this.Activate();
                         };
                         window.Show();
 
@@ -123,12 +126,12 @@ namespace Junior_CRM_Developer_Test
                 return (true, new DataTable());
             }
         }
-        private static byte[] GetHash(string inputString)
+        public static byte[] GetHash(string inputString)
         {
             using (HashAlgorithm algorithm = SHA256.Create())
                 return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
         }
-        private static string GetHashString(string inputString, string salt)
+        public static string GetHashString(string inputString, string salt)
         {
             //string salt = RandomNumberGenerator.GetString("1234567890!@#$%^&*()qwertyuiopasdfghjklzxcvbnm,.<>:;[]{}", 20);
             StringBuilder sb = new StringBuilder();

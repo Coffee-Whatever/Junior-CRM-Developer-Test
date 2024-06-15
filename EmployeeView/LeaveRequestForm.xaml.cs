@@ -79,16 +79,28 @@ namespace Junior_CRM_Developer_Test
             if (id == -1)
             {
                 var NewInstance = new LeaveRequest();
-                NewInstance._Reason = ReasonFA.SelectedValue.ToString();
-                NewInstance._StartDate = new DateOnly(StartD.SelectedDate.Value.Year, StartD.SelectedDate.Value.Month, StartD.SelectedDate.Value.Day);
-                NewInstance._EndDate = new DateOnly(EndD.SelectedDate.Value.Year, EndD.SelectedDate.Value.Month, EndD.SelectedDate.Value.Day);
+                NewInstance._Reason = (ReasonFA.SelectedValue as ComboBoxItem).Content.ToString();
+                NewInstance._StartDate = StartD.SelectedDate.Value;
+                NewInstance._EndDate = EndD.SelectedDate.Value;
                 NewInstance._Comment = CommentField.Text;
 
+                //Insert into DB
+
+                string sd = $"{NewInstance._StartDate.Value.Year}-{NewInstance._StartDate.Value.Month}-{NewInstance._StartDate.Value.Day}";
+                string ed = $"{NewInstance._EndDate.Value.Year}-{NewInstance._EndDate.Value.Month}-{NewInstance._EndDate.Value.Day}";
+                string query = $"INSERT INTO `leaverequest` (`employee`, `absence_reason`, `start_date`, `end_date`, `comment`) VALUES ({BaseUser.UserId}, '{NewInstance._Reason}', '{sd}', '{ed}', '{NewInstance._Comment}');";
+                var result = MainWindow.DBQuery(query);
+
+                query = "SELECT `AUTO_INCREMENT` FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'crmtest' AND TABLE_NAME = 'leaverequest';";
+                DataTable newId = MainWindow.DBQuery(query).Item2;
+                if(newId.Rows.Count == 0)
+                {
+                    MessageBox.Show("Something went wrong, check your data and try agian.\nIf the problem persists contact app administator.");
+                    return;
+                }
+                NewInstance.Id = Convert.ToInt32(newId.Rows[0].ItemArray[0].ToString());
                 (this.Owner as BaseUser).LeaveRequests.Add(NewInstance);
 
-                //Insert into DB
-                string query = $"INSERT INTO `leaverequest` (`employee`, `absence_reason`, `start_date`, `end_date`, `comment`) VALUES ({BaseUser.UserId}, '{NewInstance._Reason}', '{NewInstance._StartDate}', '{NewInstance._EndDate}', '{NewInstance._Comment}');";
-                var result = MainWindow.DBQuery(query);
                 if (result.Item1)
                 {
                     MessageBox.Show("Something went wrong, check your data and try agian.\nIf the problem persists contact app administator.");
@@ -96,18 +108,24 @@ namespace Junior_CRM_Developer_Test
                 else
                 {
                     MessageBox.Show("Leave request saved correctly.");
+                    if (this.Owner != null)
+                    {
+                        this.Owner.Activate();
+                    }
                     this.Close();
                 }
             }
             else
             {
                 (this.Owner as BaseUser).LeaveRequests[id]._Reason = ReasonFA.SelectedValue.ToString();
-                (this.Owner as BaseUser).LeaveRequests[id]._StartDate = new DateOnly(StartD.SelectedDate.Value.Year, StartD.SelectedDate.Value.Month, StartD.SelectedDate.Value.Day);
-                (this.Owner as BaseUser).LeaveRequests[id]._EndDate = new DateOnly(EndD.SelectedDate.Value.Year, EndD.SelectedDate.Value.Month, EndD.SelectedDate.Value.Day);
+                (this.Owner as BaseUser).LeaveRequests[id]._StartDate = StartD.SelectedDate.Value;
+                (this.Owner as BaseUser).LeaveRequests[id]._EndDate = EndD.SelectedDate.Value;
                 (this.Owner as BaseUser).LeaveRequests[id]._Comment = CommentField.Text;
                 var tempCopy = (this.Owner as BaseUser).LeaveRequests[id];
                 //Update DB
-                string query = $"UPDATE `leaverequest` SET `absence_reason`='{tempCopy._Reason}',`start_date`='{tempCopy._StartDate}',`end_date`='{tempCopy._EndDate}',`comment`='{tempCopy._Comment}' WHERE 1";
+                string sd = $"{tempCopy._StartDate.Value.Year}-{tempCopy._StartDate.Value.Month}-{tempCopy._StartDate.Value.Day}";
+                string ed = $"{tempCopy._EndDate.Value.Year}-{tempCopy._EndDate.Value.Month}-{tempCopy._EndDate.Value.Day}";
+                string query = $"UPDATE `leaverequest` SET `absence_reason`='{tempCopy._Reason}',`start_date`='{sd}',`end_date`='{ed}',`comment`='{tempCopy._Comment}' WHERE 1";
                 var result = MainWindow.DBQuery(query);
                 if (result.Item1)
                 {
@@ -116,12 +134,21 @@ namespace Junior_CRM_Developer_Test
                 else
                 {
                     MessageBox.Show("Leave request updated correctly.");
+                    if(this.Owner != null)
+                    {
+                        this.Owner.Activate();
+                    }
                     this.Close();
                 }
             }
         }
         public void Cancel(object sender, RoutedEventArgs e)
         {
+
+            if (this.Owner != null)
+            {
+                this.Owner.Activate();
+            }
             this.Close();
         }
     }

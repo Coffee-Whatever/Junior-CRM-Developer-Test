@@ -52,16 +52,13 @@ namespace Junior_CRM_Developer_Test
                 }
                 else
                 {
-                    DateTime temp;
                     foreach (DataRow row in result .Item2.Rows)
                     {
                         Project project = new Project();
 
                         project._Type = row.ItemArray[0].ToString();
-                        temp = Convert.ToDateTime(row.ItemArray[1]);
-                        project._StartDate = new DateOnly(temp.Year, temp.Month, temp.Day);
-                        temp = Convert.ToDateTime(row.ItemArray[2]);
-                        project._EndDate = new DateOnly(temp.Year, temp.Month, temp.Day);
+                        project._StartDate = Convert.ToDateTime(row.ItemArray[1]);
+                        project._EndDate = Convert.ToDateTime(row.ItemArray[2]);
                         project._Status = row.ItemArray[3].ToString();
                         project._Manager = row.ItemArray[5].ToString();
                         project._Comment = row.ItemArray[4].ToString();
@@ -82,17 +79,14 @@ namespace Junior_CRM_Developer_Test
                 }
                 else
                 {
-                    DateTime temp;
                     foreach (DataRow row in result .Item2.Rows)
                     {
                         LeaveRequest request = new LeaveRequest();
 
                         request.Id = Convert.ToInt32(row.ItemArray[0]);
                         request._Reason = row.ItemArray[2].ToString();
-                        temp = Convert.ToDateTime(row.ItemArray[3]);
-                        request._StartDate = new DateOnly(temp.Year, temp.Month, temp.Day);
-                        temp = Convert.ToDateTime(row.ItemArray[4]).Date;
-                        request._EndDate = new DateOnly(temp.Year, temp.Month, temp.Day);
+                        request._StartDate = Convert.ToDateTime(row.ItemArray[3]);
+                        request._EndDate = Convert.ToDateTime(row.ItemArray[4]).Date;
                         request._Comment = row.ItemArray[5].ToString();
                         request._Status = row.ItemArray[6].ToString();
 
@@ -121,6 +115,10 @@ namespace Junior_CRM_Developer_Test
         }
         public void CancleRequest(object sender, RoutedEventArgs e)
         {
+            if (LeaveDataGrid.SelectedCells.Count == 0)
+            {
+                return;
+            }
             var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
             if (selectedObject._Status == "Cancelled") return;
             int id = indexOfId(selectedObject.Id);
@@ -129,13 +127,6 @@ namespace Junior_CRM_Developer_Test
             {
                 MessageBox.Show("Something went wrong.\nPlease contact app administator.");
                 return;
-            }
-            else
-            {
-                LeaveRequests[id]._Status = "Cancelled";
-                LeaveDataGrid.ItemsSource = null;
-                LeaveDataGrid.ItemsSource = LeaveRequests;
-                LeaveDataGrid.UpdateLayout();
             }
 
             string query = $"UPDATE `leaverequest` SET `status`='Cancelled' WHERE id={selectedObject.Id};DELETE FROM `approvalrequest` WHERE `leave_request` = {selectedObject.Id};";
@@ -147,11 +138,20 @@ namespace Junior_CRM_Developer_Test
             }
             else
             {
+                LeaveRequests[id]._Status = "Cancelled";
+                LeaveDataGrid.ItemsSource = null;
+                LeaveDataGrid.ItemsSource = LeaveRequests;
+                LeaveDataGrid.UpdateLayout();
                 MessageBox.Show("Leave request marked as 'Cancelled' correctly.");
             }
         }
         public void SubmitRequest(object sender, RoutedEventArgs e)
         {
+            if(LeaveDataGrid.SelectedCells.Count == 0)
+            {
+                return;
+            }
+
             var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
             int id = indexOfId(selectedObject.Id);
             if (selectedObject._Status == "Submitted") return;
@@ -161,13 +161,6 @@ namespace Junior_CRM_Developer_Test
                 MessageBox.Show("Something went wrong.\nPlease contact app administator.");
                 return;
             }
-            else
-            {
-                LeaveRequests[id]._Status = "Submitted";
-                LeaveDataGrid.ItemsSource = null;
-                LeaveDataGrid.ItemsSource = LeaveRequests;
-                LeaveDataGrid.UpdateLayout();
-            }
 
             
             var approverSelection = new SelectApprover();
@@ -175,7 +168,8 @@ namespace Junior_CRM_Developer_Test
             approverSelection.Owner = this;
             approverSelection.ShowDialog();
 
-            string query = $"UPDATE `leaverequest` SET `status`='Submitted' WHERE id={selectedObject.Id};INSERT INTO `approvalrequest` (`approver`, `leave_request`, `comment`) VALUES ({ApproverId},'{selectedObject.Id}','{selectedObject._Comment}');";
+            this.Activate();
+            string query = $"UPDATE `leaverequest` SET `status`='Submitted' WHERE id={selectedObject.Id};INSERT INTO `approvalrequest` (`approver`, `leave_request`, `comment`) VALUES ({ApproverId},{selectedObject.Id},'{selectedObject._Comment}');";
 
             var result = MainWindow.DBQuery(query);
 
@@ -185,6 +179,10 @@ namespace Junior_CRM_Developer_Test
             }
             else
             {
+                LeaveRequests[id]._Status = "Submitted";
+                LeaveDataGrid.ItemsSource = null;
+                LeaveDataGrid.ItemsSource = LeaveRequests;
+                LeaveDataGrid.UpdateLayout();
                 MessageBox.Show("Leave request marked as 'Submitted' correctly.");
             }
 

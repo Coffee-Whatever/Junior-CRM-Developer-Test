@@ -58,6 +58,12 @@ CREATE TABLE Credentials (
 
 INSERT INTO Employees VALUES
 (1, 'Patryk Klimkiewicz', 'Admin', 'Administrator', 'Active', 1, 26, '');
+INSERT INTO Employees VALUES
+(2, 'TestUser1', 'HR', 'HR Manager', 'Active', 1, 26, '');
+INSERT INTO Employees VALUES
+(3, 'TestUser2', 'Dev', 'Developer', 'Active', 2, 26, '');
+INSERT INTO Employees VALUES
+(4, 'TestUser3', 'Sales', 'Marketer', 'Active', 4, 26, '');
 
 INSERT INTO `credentials` VALUES
 (1, 1, 'admin', '0F2FD52805592D291CE45E932F85176274B003F8D1B9F297274F4326E9F40580', 'k!xkzf>odaaab<%m),o1', 'full');
