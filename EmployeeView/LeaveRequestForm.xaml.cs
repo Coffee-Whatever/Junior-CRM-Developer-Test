@@ -25,7 +25,7 @@ namespace Junior_CRM_Developer_Test
             InitializeComponent();
 
             string query = "SHOW COLUMNS FROM leaverequest WHERE FIELD = 'absence_reason';";
-            var result = DBQuery(query);
+            var result = MainWindow.DBQuery(query);
             if (result.Item1)
             {
                 MessageBox.Show("An error accrued when grabbing absence reasons from DB\nPleas contact the app administrator.");
@@ -45,32 +45,12 @@ namespace Junior_CRM_Developer_Test
         public void LoadData(LeaveRequest values)
         {
 
-            index = values.Id;
+            index = values._Id;
             //If reason isn't found, IndexOf returns -1, which in .SelectedIndex means no selected value
             ReasonFA.SelectedIndex = reasonList.IndexOf(values._Reason);
             StartD.SelectedDate = Convert.ToDateTime(values._StartDate.Value.ToString());
             EndD.SelectedDate = Convert.ToDateTime(values._EndDate.Value.ToString());
             CommentField.Text = values._Comment;
-        }
-        public static (bool, DataTable) DBQuery(string query)
-        {
-            // (didErrorHappen, ResultIfNoError)
-            try
-            {
-                string connetionstring = "Server=localhost;Database=crmtest;Uid=root;Convert Zero Datetime=True";
-                MySqlConnection conn = new MySqlConnection(connetionstring);
-                conn.Open();
-
-                MySqlDataAdapter dtb = new MySqlDataAdapter();
-                dtb.SelectCommand = new MySqlCommand(query, conn);
-                DataTable dtable = new DataTable();
-                dtb.Fill(dtable);
-                return (false, dtable);
-            }
-            catch (Exception ex)
-            {
-                return (true, new DataTable());
-            }
         }
         public void Submit(object sender, RoutedEventArgs e)
         {
@@ -98,8 +78,8 @@ namespace Junior_CRM_Developer_Test
                     MessageBox.Show("Something went wrong, check your data and try agian.\nIf the problem persists contact app administator.");
                     return;
                 }
-                NewInstance.Id = Convert.ToInt32(newId.Rows[0].ItemArray[0].ToString());
-                (this.Owner as BaseUser).LeaveRequests.Add(NewInstance);
+                NewInstance._Id = Convert.ToInt32(newId.Rows[0].ItemArray[0].ToString());
+                BaseUser.LeaveRequests.Add(NewInstance);
 
                 if (result.Item1)
                 {
@@ -117,11 +97,11 @@ namespace Junior_CRM_Developer_Test
             }
             else
             {
-                (this.Owner as BaseUser).LeaveRequests[id]._Reason = ReasonFA.SelectedValue.ToString();
-                (this.Owner as BaseUser).LeaveRequests[id]._StartDate = StartD.SelectedDate.Value;
-                (this.Owner as BaseUser).LeaveRequests[id]._EndDate = EndD.SelectedDate.Value;
-                (this.Owner as BaseUser).LeaveRequests[id]._Comment = CommentField.Text;
-                var tempCopy = (this.Owner as BaseUser).LeaveRequests[id];
+                BaseUser.LeaveRequests[id]._Reason = ReasonFA.SelectedValue.ToString();
+                BaseUser.LeaveRequests[id]._StartDate = StartD.SelectedDate.Value;
+                BaseUser.LeaveRequests[id]._EndDate = EndD.SelectedDate.Value;
+                BaseUser.LeaveRequests[id]._Comment = CommentField.Text;
+                var tempCopy = BaseUser.LeaveRequests[id];
                 //Update DB
                 string sd = $"{tempCopy._StartDate.Value.Year}-{tempCopy._StartDate.Value.Month}-{tempCopy._StartDate.Value.Day}";
                 string ed = $"{tempCopy._EndDate.Value.Year}-{tempCopy._EndDate.Value.Month}-{tempCopy._EndDate.Value.Day}";

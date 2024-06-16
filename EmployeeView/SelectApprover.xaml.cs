@@ -29,8 +29,8 @@ namespace Junior_CRM_Developer_Test
             }
             foreach (DataRow row in result.Item2.Rows)
             {
-                var approver = new ComboBoxItem {Content = $"{row.ItemArray[1]} | {row.ItemArray[2]}"};
-                approver.Tag = row.ItemArray[0];
+                var approver = new ComboBoxItem {Content = $"{row["full_name"]} | {row["subdivision"]}"};
+                approver.Tag = row["id"];
                 Approvers.Items.Add(approver);
             }
         }

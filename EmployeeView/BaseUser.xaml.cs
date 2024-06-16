@@ -27,7 +27,7 @@ namespace Junior_CRM_Developer_Test
     public partial class BaseUser : Window
     {
         public ObservableCollection<Project> Projects { get; set; } = new();
-        public ObservableCollection<LeaveRequest> LeaveRequests { get; set; } = new();
+        public static ObservableCollection<LeaveRequest> LeaveRequests { get; set; } = new();
         public static int UserId;
         public static int ApproverId;
         public BaseUser()
@@ -56,12 +56,12 @@ namespace Junior_CRM_Developer_Test
                     {
                         Project project = new Project();
 
-                        project._Type = row.ItemArray[0].ToString();
-                        project._StartDate = Convert.ToDateTime(row.ItemArray[1]);
-                        project._EndDate = Convert.ToDateTime(row.ItemArray[2]);
-                        project._Status = row.ItemArray[3].ToString();
-                        project._Manager = row.ItemArray[5].ToString();
-                        project._Comment = row.ItemArray[4].ToString();
+                        project._Type = row["type"].ToString();
+                        project._StartDate = Convert.ToDateTime(row["start_date"]);
+                        project._EndDate = Convert.ToDateTime(row["end_date"]);
+                        project._Status = row["status"].ToString();
+                        project._Manager = row["comment"].ToString();
+                        project._Comment = row["Manager"].ToString();
 
                         Projects.Add(project);
                     }
@@ -70,7 +70,6 @@ namespace Junior_CRM_Developer_Test
             }
             {
                 //Leave Request Creation
-                //Project Generation
                 string query = $"SELECT * FROM `leaverequest` WHERE employee = {id};";
                 var result  = MainWindow.DBQuery(query);
                 if (result .Item1)
@@ -81,14 +80,15 @@ namespace Junior_CRM_Developer_Test
                 {
                     foreach (DataRow row in result .Item2.Rows)
                     {
+                        //`id`, `employee`, `absence_reason`, `start_date`, `end_date`, `comment`, `status`
                         LeaveRequest request = new LeaveRequest();
 
-                        request.Id = Convert.ToInt32(row.ItemArray[0]);
-                        request._Reason = row.ItemArray[2].ToString();
-                        request._StartDate = Convert.ToDateTime(row.ItemArray[3]);
-                        request._EndDate = Convert.ToDateTime(row.ItemArray[4]).Date;
-                        request._Comment = row.ItemArray[5].ToString();
-                        request._Status = row.ItemArray[6].ToString();
+                        request._Id = Convert.ToInt32(row["id"]);
+                        request._Reason = row["absence_reason"].ToString();
+                        request._StartDate = Convert.ToDateTime(row["start_date"]);
+                        request._EndDate = Convert.ToDateTime(row["end_date"]).Date;
+                        request._Comment = row["comment"].ToString();
+                        request._Status = row["status"].ToString();
 
                         LeaveRequests.Add(request);
                     }
@@ -121,7 +121,7 @@ namespace Junior_CRM_Developer_Test
             }
             var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
             if (selectedObject._Status == "Cancelled") return;
-            int id = indexOfId(selectedObject.Id);
+            int id = indexOfId(selectedObject._Id);
             
             if(id == -1)
             {
@@ -129,7 +129,7 @@ namespace Junior_CRM_Developer_Test
                 return;
             }
 
-            string query = $"UPDATE `leaverequest` SET `status`='Cancelled' WHERE id={selectedObject.Id};DELETE FROM `approvalrequest` WHERE `leave_request` = {selectedObject.Id};";
+            string query = $"UPDATE `leaverequest` SET `status`='Cancelled' WHERE id={selectedObject._Id};DELETE FROM `approvalrequest` WHERE `leave_request` = {selectedObject._Id};";
             var result = MainWindow.DBQuery(query);
            
             if (result.Item1)
@@ -153,7 +153,7 @@ namespace Junior_CRM_Developer_Test
             }
 
             var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
-            int id = indexOfId(selectedObject.Id);
+            int id = LeaveRequests.IndexOf(selectedObject);
             if (selectedObject._Status == "Submitted") return;
 
             if (id == -1)
@@ -169,7 +169,7 @@ namespace Junior_CRM_Developer_Test
             approverSelection.ShowDialog();
 
             this.Activate();
-            string query = $"UPDATE `leaverequest` SET `status`='Submitted' WHERE id={selectedObject.Id};INSERT INTO `approvalrequest` (`approver`, `leave_request`, `comment`) VALUES ({ApproverId},{selectedObject.Id},'{selectedObject._Comment}');";
+            string query = $"UPDATE `leaverequest` SET `status`='Submitted' WHERE id={selectedObject._Id};INSERT INTO `approvalrequest` (`approver`, `leave_request`, `comment`) VALUES ({ApproverId},{selectedObject._Id},'{selectedObject._Comment}');";
 
             var result = MainWindow.DBQuery(query);
 
@@ -192,7 +192,7 @@ namespace Junior_CRM_Developer_Test
         {
             for (int i = 0; i < LeaveRequests.Count; i++)
             {
-                if (LeaveRequests[i].Id == id) return i;
+                if (LeaveRequests[i]._Id == id) return i;
             }
             return -1;
         }

@@ -35,8 +35,8 @@ namespace Junior_CRM_Developer_Test.Admin
 
             foreach(DataRow row in result.Item2.Rows)
             {
-                var instance = new ComboBoxItem {Content = $"{row.ItemArray[1]} - {row.ItemArray[2]}" };
-                instance.Tag = row.ItemArray[0].ToString();
+                var instance = new ComboBoxItem {Content = $"{row["full_name"]} - {row["subdivision"]}" };
+                instance.Tag = row["id"].ToString();
                 Id.Items.Add(instance);
             }
             query = "SHOW COLUMNS FROM credentials WHERE FIELD = 'access_level';";

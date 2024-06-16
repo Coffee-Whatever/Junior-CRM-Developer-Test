@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="HRM\" />
     <Folder Include="PM\" />
   </ItemGroup>
 

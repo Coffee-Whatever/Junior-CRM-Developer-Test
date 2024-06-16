@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Windows.Documents.Serialization;
 using System.ComponentModel;
 using Junior_CRM_Developer_Test.Admin;
+using Junior_CRM_Developer_Test.HRM;
 
 namespace Junior_CRM_Developer_Test
 {
@@ -34,7 +35,7 @@ namespace Junior_CRM_Developer_Test
             }
 
             dtable = Qresult.Item2;
-            salt = dtable.Rows[0].ItemArray[0].ToString();
+            salt = dtable.Rows[0]["current_salt"].ToString();
 
             string pass = GetHashString(password.Password, salt);
 
@@ -63,12 +64,12 @@ namespace Junior_CRM_Developer_Test
             }
             dtable = Qresult.Item2;
 
-            string access = dtable.Rows[0].ItemArray[0].ToString();
+            string access = dtable.Rows[0]["access_level"].ToString();
             switch (access)
             {
                 case "base":
                     {
-                        BaseUser window = new BaseUser(Convert.ToInt32(dtable.Rows[0].ItemArray[1]));
+                        BaseUser window = new BaseUser(Convert.ToInt32(dtable.Rows[0]["employee_id"]));
                         window.ShowActivated = true;
                         window.Closing += (object sender, CancelEventArgs e) =>
                         {
@@ -82,7 +83,16 @@ namespace Junior_CRM_Developer_Test
                     break;
                 case "HRmanagement":
                     {
+                        HRMenu window = new HRMenu(Convert.ToInt32(dtable.Rows[0]["employee_id"]));
+                        window.ShowActivated = true;
+                        window.Closing += (object sender, CancelEventArgs e) =>
+                        {
+                            this.Show();
+                            this.Activate();
+                        };
+                        window.Show();
 
+                        this.Hide();
                     }
                     break;
                 case "Pmanagement":

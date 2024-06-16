@@ -1,0 +1,22 @@
+1. The HR manager
+With a list of approval requests, the HR manager can:
+• approve the request – related leave request is updated with the corresponding status, and employee absence balance is recalculated;
+• reject the request – related leave request is updated with the corresponding status. And write a comment
+
+
+2. The Project manager
+
+With a list of employees, the Project manager can:
+• open an employee – a new form opens with details.
+• assign an employee to projects.
+
+With a list of approval requests, the Project manager can:
+• approve the request – related leave request is updated with the corresponding status, and employee absence balance is recalculated;
+• reject the request – related leave request is updated with the corresponding status. Write a comment
+
+With a list of leave requests, the Project manager can:
+• open a request – a new form opens with details.
+
+With a list of projects, the Project manager can:
+• open a project– a new form opens with details
+• add/update/deactivate projects in the list.
