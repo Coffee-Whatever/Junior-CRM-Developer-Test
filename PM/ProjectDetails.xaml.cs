@@ -121,6 +121,12 @@ namespace Junior_CRM_Developer_Test.PM
         }
         private void Update(object sender, RoutedEventArgs e)
         {
+            if (Type.SelectedItem == null) return;
+            if (Manager.SelectedItem == null) return;
+            if (Status.SelectedItem == null) return;
+            if (StartDate.SelectedDate == null) return;
+            if (EndDate.SelectedDate == null) return;
+
             if(isModified)
             {
                 Project instance = copy;
@@ -168,6 +174,8 @@ namespace Junior_CRM_Developer_Test.PM
                     this.Close();
                     return;
                 }
+                instance._Id = Convert.ToInt32(result.Item2.Rows[0][0]);
+
                 string sd = $"{instance._StartDate.Year}-{instance._StartDate.Month}-{instance._StartDate.Day}";
                 string ed = $"{instance._EndDate.Year}-{instance._EndDate.Month}-{instance._EndDate.Day}";
 
@@ -181,7 +189,6 @@ namespace Junior_CRM_Developer_Test.PM
                     return;
                 }
 
-                instance._Id = Convert.ToInt32(result.Item2.Rows[0][0]);
                 PMProjects.Projects.Add(instance);
             }
         }

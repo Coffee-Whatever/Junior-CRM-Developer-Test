@@ -118,21 +118,9 @@ namespace Junior_CRM_Developer_Test.ManagerShared
             }
 
             int employee = Convert.ToInt32(result.Item2.Rows[0]["employee"]);
-            query = $"SELECT `3ob` FROM `employees` WHERE `id` = {employee};";
-            result = MainWindow.DBQuery(query);
+            int daysToSubtract = countWeekDays(RequestsCollection[id]._StartDate, RequestsCollection[id]._EndDate);
 
-            if (result.Item1)
-            {
-                query = "ROLLBACK;SET autocommit=1;";
-                MainWindow.DBQuery(query);
-                MessageBox.Show("Something went wrong, please try again later.\nPlease contact the app administrator if the issue persists.");
-                return;
-            }
-
-            int OutOfOfficeBalance = Convert.ToInt32(result.Item2.Rows[0]["3ob"]);
-            OutOfOfficeBalance -= countWeekDays(RequestsCollection[id]._StartDate, RequestsCollection[id]._EndDate);
-
-            query = $"UPDATE `employees` SET `3ob`={OutOfOfficeBalance} WHERE `id` = {employee};";
+            query = $"UPDATE `employees` SET `3ob` = `3ob` + {daysToSubtract} WHERE `id` = {employee}";
             result = MainWindow.DBQuery(query);
 
             if (result.Item1)

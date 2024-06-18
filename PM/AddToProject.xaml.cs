@@ -38,7 +38,7 @@ namespace Junior_CRM_Developer_Test.PM
             foreach(DataRow row in result.Item2.Rows)
             {
                 var project = new ComboBoxItem();
-                project.Content = $"{row["type"]} | {row["manager"]}";
+                project.Content = $"{row["id"]} | {row["type"]} | {row["manager"]}";
                 project.Tag = row["id"].ToString();
 
                 Projects.Items.Add(project);
@@ -46,6 +46,8 @@ namespace Junior_CRM_Developer_Test.PM
         }
         public void Save(object sender, EventArgs e)
         {
+            if (Projects.SelectedItem == null) return;
+
             int projectId = Convert.ToInt32((Projects.SelectedItem as ComboBoxItem).Tag);
             string query = $"INSERT INTO `employeeprojectrelations` (`employeeId`, `projectId`) VALUES ({employeeId},{projectId});";
             var result = MainWindow.DBQuery(query);

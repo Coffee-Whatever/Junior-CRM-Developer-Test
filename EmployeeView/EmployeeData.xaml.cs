@@ -65,7 +65,7 @@ namespace Junior_CRM_Developer_Test.EmployeeView
             foreach(var sub in Partner.Items)
             {
                 var sub2 = sub as ComboBoxItem;
-                if(sub2.Content.ToString() == $"{employee._Partner} | {employee._Subdivision}")
+                if(sub2.Content.ToString() == employee._Partner)
                 {
                    Partner.SelectedIndex = i;
                 }
@@ -141,6 +141,11 @@ namespace Junior_CRM_Developer_Test.EmployeeView
         }
         public void Save(object sender, RoutedEventArgs e)
         {
+            if (FEName.Text == null) return;
+            if (Subdivision.SelectedItem == null) return;
+            if (Position.SelectedItem == null) return;
+            if (Partner.SelectedItem == null) return;
+
             if (Modify)
             {
                 ModifiedEmployee._Name = FEName.Text;

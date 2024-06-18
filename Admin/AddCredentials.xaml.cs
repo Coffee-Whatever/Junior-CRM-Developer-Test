@@ -24,7 +24,7 @@ namespace Junior_CRM_Developer_Test.Admin
         public AddCredentials()
         {
             InitializeComponent();
-            string query = "SELECT `id`, `full_name`, `subdivision` FROM `employees`\r\nWHERE `id` NOT IN (SELECT DISTINCT `employee_id` FROM `credentials`);";
+            string query = "SELECT `id`, `full_name`, `subdivision` FROM `employees` WHERE `id` NOT IN (SELECT DISTINCT `employee_id` FROM `credentials`);";
             var result = MainWindow.DBQuery(query);
             if (result.Item1)
             {
@@ -32,34 +32,48 @@ namespace Junior_CRM_Developer_Test.Admin
                 this.Close();
                 return;
             }
+            if(result.Item2.Rows.Count != 0)
+            {
+                foreach (DataRow row in result.Item2.Rows)
+                {
+                    var instance = new ComboBoxItem { Content = $"{row["full_name"]} - {row["subdivision"]}" };
+                    instance.Tag = row["id"].ToString();
+                    Id.Items.Add(instance);
+                }
 
-            foreach(DataRow row in result.Item2.Rows)
-            {
-                var instance = new ComboBoxItem {Content = $"{row["full_name"]} - {row["subdivision"]}" };
-                instance.Tag = row["id"].ToString();
-                Id.Items.Add(instance);
+                query = "SHOW COLUMNS FROM credentials WHERE FIELD = 'access_level';";
+                result = MainWindow.DBQuery(query);
+                if (result.Item1)
+                {
+                    MessageBox.Show("Something went wrong.\nPlease contact the app administrator");
+                    this.Close();
+                    return;
+                }
+                //enum('base','HRmanagement','Pmanagement','full')
+                string temp = result.Item2.Rows[0].ItemArray[1].ToString();
+                List<string> accesslevels = temp.Substring(6, temp.Length - 8).Split("','").ToList();
+                foreach (var AL in accesslevels)
+                {
+                    var instance = new ComboBoxItem { Content = AL };
+                    instance.Tag = AL;
+                    AccessLevel.Items.Add(instance);
+                }
             }
-            query = "SHOW COLUMNS FROM credentials WHERE FIELD = 'access_level';";
-            result = MainWindow.DBQuery(query);
-            if (result.Item1)
+            else
             {
-                MessageBox.Show("Something went wrong.\nPlease contact the app administrator");
-                this.Close();
+                MessageBox.Show("all employees have accounts");
+                this.Close(); 
                 return;
-            }
-            //enum('base','HRmanagement','Pmanagement','full')
-            string temp = result.Item2.Rows[0].ItemArray[1].ToString();
-            List<string> accesslevels = temp.Substring(6, temp.Length - 8).Split("','").ToList();
-            foreach(var AL in accesslevels)
-            {
-                var instance = new ComboBoxItem {Content = AL};
-                instance.Tag = AL;
-                AccessLevel.Items.Add(instance);
             }
         }
 
         private void CreateNewCredentials(object sender, RoutedEventArgs e)
         {
+            if (login.Text == null) return;
+            if(Id.SelectedItem == null) return;
+            if(password.Text == null) return;
+            if(AccessLevel.SelectedItem == null) return;
+
             string Userlogin = login.Text;
             string salt = RandomNumberGenerator.GetString("1234567890!@#$%^&*()qwertyuiopasdfghjklzxcvbnm,.<>:;[]{}", 20);
             string pass = MainWindow.GetHashString(password.Text, salt);

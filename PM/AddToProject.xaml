@@ -11,10 +11,11 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Center">
         <ComboBox
-            MinWidth="200"
+            MinWidth="300"
             x:Name="Projects"/>
         <StackPanel
-            Orientation="Horizontal">
+            Orientation="Horizontal"
+            HorizontalAlignment="Center">
             <Button
                 Content="Button"
                 BorderBrush="{x:Null}"

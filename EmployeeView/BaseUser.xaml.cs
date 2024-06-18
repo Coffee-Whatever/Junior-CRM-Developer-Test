@@ -114,7 +114,10 @@ namespace Junior_CRM_Developer_Test
             {
                 return;
             }
-            var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
+
+            var selectedObject = LeaveDataGrid.SelectedItem as LeaveRequest;
+            if (selectedObject._Status == "Accepted" || selectedObject._Status == "Rejected") return;
+
             var Form = new LeaveRequestForm();
             Form.LoadData(selectedObject);
             Form.ShowActivated = true;
@@ -123,11 +126,11 @@ namespace Junior_CRM_Developer_Test
         }
         public void CancleRequest(object sender, RoutedEventArgs e)
         {
-            if (LeaveDataGrid.SelectedCells.Count == 0)
+            if (LeaveDataGrid.SelectedItem == null)
             {
                 return;
             }
-            var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
+            var selectedObject = LeaveDataGrid.SelectedItem as LeaveRequest;
             if (selectedObject._Status == "Cancelled") return;
             int id = indexOfId(selectedObject._Id);
             
@@ -135,6 +138,17 @@ namespace Junior_CRM_Developer_Test
             {
                 MessageBox.Show("Something went wrong.\nPlease contact app administator.");
                 return;
+            }
+
+            if (selectedObject._Status == "Accepted")
+            {
+                int missingDays = countWeekDays(selectedObject._StartDate, selectedObject._EndDate);
+                string TempQuery = $"UPDATE `employees` SET `3ob` = `3ob` + {missingDays} WHERE `id` = {UserId}";
+                var temp = MainWindow.DBQuery(TempQuery);
+                if (temp.Item1)
+                {
+                    MessageBox.Show("Something went wrong during days out of office recalculation.\nPlease contact app administator.");
+                }
             }
 
             string query = $"UPDATE `leaverequest` SET `status`='Cancelled' WHERE id={selectedObject._Id};DELETE FROM `approvalrequest` WHERE `leave_request` = {selectedObject._Id};";
@@ -155,12 +169,12 @@ namespace Junior_CRM_Developer_Test
         }
         public void SubmitRequest(object sender, RoutedEventArgs e)
         {
-            if(LeaveDataGrid.SelectedCells.Count == 0)
+            if (LeaveDataGrid.SelectedItem == null)
             {
                 return;
             }
 
-            var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
+            var selectedObject = LeaveDataGrid.SelectedItem as LeaveRequest;
             int id = LeaveRequests.IndexOf(selectedObject);
             if (selectedObject._Status == "Submitted") return;
 
@@ -203,6 +217,14 @@ namespace Junior_CRM_Developer_Test
                 if (LeaveRequests[i]._Id == id) return i;
             }
             return -1;
+        }
+        public int countWeekDays(DateTime d0, DateTime d1)
+        {
+            int ndays = 1 + Convert.ToInt32((d1 - d0).TotalDays);
+            int nsaturdays = (ndays + Convert.ToInt32(d0.DayOfWeek)) / 7;
+            return ndays - 2 * nsaturdays
+                   - (d0.DayOfWeek == DayOfWeek.Sunday ? 1 : 0)
+                   + (d1.DayOfWeek == DayOfWeek.Saturday ? 1 : 0);
         }
     }
 }

@@ -55,6 +55,9 @@ namespace Junior_CRM_Developer_Test
         public void Submit(object sender, RoutedEventArgs e)
         {
             int id = (this.Owner as BaseUser).indexOfId(index);
+            if (ReasonFA.SelectedItem == null) return;
+            if (StartD.SelectedDate == null) return;
+            if (EndD.SelectedDate == null) return;
 
             if (id == -1)
             {
