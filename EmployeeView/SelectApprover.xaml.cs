@@ -20,7 +20,7 @@ namespace Junior_CRM_Developer_Test
         public SelectApprover()
         {
             InitializeComponent();
-            string query = "SELECT id, full_name, subdivision FROM `employees` WHERE position = 'HR Manager' OR id IN (SELECT DISTINCT `manager` FROM `projects`);";
+            string query = "SELECT `employees`.`id`, `employees`.`full_name`, `employees`.`subdivision` FROM `employees` JOIN `credentials` ON `employees`.`id` = `credentials`.`employee_id` WHERE `credentials`.`access_level` = 'Pmanagement' OR `credentials`.`access_level` = 'HRmanagement';";
             var result = MainWindow.DBQuery(query);
             if (result.Item1)
             {

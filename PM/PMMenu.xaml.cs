@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Junior_CRM_Developer_Test.ManagerShared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,25 +13,27 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Junior_CRM_Developer_Test.ManagerShared;
 
-namespace Junior_CRM_Developer_Test.HRM
+namespace Junior_CRM_Developer_Test.PM
 {
-    public partial class HRMenu : Window
+    /// <summary>
+    /// Interaction logic for PMMenu.xaml
+    /// </summary>
+    public partial class PMMenu : Window
     {
         private int UserId { get; set; }
-        public HRMenu()
+        public PMMenu()
         {
             InitializeComponent();
         }
-        public HRMenu(int id)
+        public PMMenu(int id)
         {
             InitializeComponent();
             UserId = id;
         }
         public void OpenEmployeeWindow(object sender, EventArgs e)
         {
-            HREmployees window = new HREmployees();
+            PMEmployees window = new PMEmployees();
             window.Owner = this;
             window.Closing += (object sender, CancelEventArgs e) =>
             {
@@ -42,7 +45,7 @@ namespace Junior_CRM_Developer_Test.HRM
         }
         public void OpenProjectsWindow(object sender, EventArgs e)
         {
-            HRProjects window = new HRProjects();
+            PMProjects window = new PMProjects();
             window.Owner = this;
             window.Closing += (object sender, CancelEventArgs e) =>
             {

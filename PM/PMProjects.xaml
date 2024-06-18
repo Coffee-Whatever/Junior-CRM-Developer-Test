@@ -1,0 +1,151 @@
+﻿<Window x:Class="Junior_CRM_Developer_Test.PM.PMProjects"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Junior_CRM_Developer_Test.PM"
+        mc:Ignorable="d"
+        Title="PMProjects" Height="450" Width="800"
+        Background="{StaticResource BackBrush}">
+    <StackPanel
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+        <DataGrid 
+            MinHeight="100"
+            Margin="0,0,0,10"
+            x:Name="ProjectsDataGrid"
+            AutoGenerateColumns="False"
+            ItemsSource="{Binding Path=., Mode=OneWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+            GridLinesVisibility="Horizontal"
+            HeadersVisibility="Column"
+            Background="{StaticResource PrimaryBrush}"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            SelectionMode="Single"
+            SelectionUnit="FullRow"
+            IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding _Type}" Header="Type"/>
+                <DataGridTextColumn Binding="{Binding _StartDate}" Header="Start"/>
+                <DataGridTextColumn Binding="{Binding _EndDate}" Header="End"/>
+                <DataGridTextColumn Binding="{Binding _Manager}" Header="Manager"/>
+                <DataGridTextColumn Binding="{Binding _Status}" Header="Status"/>
+                <DataGridTextColumn Binding="{Binding _Comment}" Header="Comment"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <Button 
+                Content="Button"
+                BorderBrush="{x:Null}"
+                Foreground="{StaticResource TextBrush}"
+                Click="Add">
+                <Button.Style>
+                    <Style
+                         TargetType="{x:Type Button}">
+                        <Setter 
+                              Property="Background" Value="{StaticResource SecondaryBrush}"/>
+                        <Setter 
+                               Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate
+                                    TargetType="{x:Type Button}">
+                                    <Border 
+                                        Background="{TemplateBinding Background}"
+                                        Padding="10">
+                                        <TextBlock
+                                             HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Add new project"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger 
+                                  Property="IsMouseOver" Value="True">
+                                <Setter 
+                                    Property="Background" Value="{StaticResource AccentBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button 
+                Content="Button"
+                BorderBrush="{x:Null}"
+                Foreground="{StaticResource TextBrush}"
+                Click="Update">
+                <Button.Style>
+                    <Style
+                         TargetType="{x:Type Button}">
+                        <Setter 
+                              Property="Background" Value="{StaticResource SecondaryBrush}"/>
+                        <Setter 
+                               Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate
+                                    TargetType="{x:Type Button}">
+                                    <Border 
+                                        Background="{TemplateBinding Background}"
+                                        Padding="10"
+                                        Margin="10,0,10,0">
+                                        <TextBlock
+                                             HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Update project details"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger 
+                                  Property="IsMouseOver" Value="True">
+                                <Setter 
+                                    Property="Background" Value="{StaticResource AccentBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button 
+                Content="Button"
+                BorderBrush="{x:Null}"
+                Foreground="{StaticResource TextBrush}"
+                Click="Deactivate">
+                <Button.Style>
+                    <Style
+                         TargetType="{x:Type Button}">
+                        <Setter 
+                            Property="Background" Value="{StaticResource SecondaryBrush}"/>
+                        <Setter 
+                            Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate
+                                    TargetType="{x:Type Button}">
+                                    <Border 
+                                        Background="{TemplateBinding Background}"
+                                        Padding="10">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="10"
+                                            Text="Deactivate Project"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger 
+                                Property="IsMouseOver" Value="True">
+                                <Setter 
+                                    Property="Background" Value="{StaticResource AccentBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</Window>

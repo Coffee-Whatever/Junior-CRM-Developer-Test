@@ -1,4 +1,7 @@
-﻿CREATE TABLE Employees (
+﻿CREATE DATABASE crmtest;
+USE crmtest;
+SET GLOBAL max_allowed_packet=33554432;
+CREATE TABLE Employees (
 	id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
 	full_name VARCHAR(150) NOT NULL,
 	subdivision enum('Admin', 'HR', 'Dev', 'Sales') NOT NULL,
@@ -66,7 +69,10 @@ INSERT INTO Employees VALUES
 (4, 'TestUser3', 'Sales', 'Marketer', 'Active', 4, 26, '');
 
 INSERT INTO `credentials` VALUES
-(1, 1, 'admin', '0F2FD52805592D291CE45E932F85176274B003F8D1B9F297274F4326E9F40580', 'k!xkzf>odaaab<%m),o1', 'full');
+(1, 1, 'admin', '0F2FD52805592D291CE45E932F85176274B003F8D1B9F297274F4326E9F40580', 'k!xkzf>odaaab<%m),o1', 'full'),
+(2, 4, 'baseuser', '33A1BF8BEBDCDBE1CD6989176CA34D6375EF3B31377D3CAE2D60C363B09C1E0A', 'g;!(m,m!n1fj2ad9jfa{', 'base'),
+(3, 2, 'hr', '676377AE98C151E4D691399A56BDFA47599398C1BB125B32904260BB699CD530', '7tp]df:st)sta]i0rae7', 'HRmanagement'),
+(4, 3, 'pm', '97C4B45D6ACD82FFC4403989FD0D9B1B69452EAEE12D7977A235E6EA0B7DB1E0', '&d&q08#ftk:2oyt#fixb', 'Pmanagement');
 
 INSERT INTO `projects`(`id`, `type`, `start_date`, `end_date`, `manager`, `comment`, `status`) VALUES
 (1,'AppDevelopmnet', "2024-06-13", "", 1, 'TestApp','Active');

@@ -48,8 +48,8 @@ namespace Junior_CRM_Developer_Test
             index = values._Id;
             //If reason isn't found, IndexOf returns -1, which in .SelectedIndex means no selected value
             ReasonFA.SelectedIndex = reasonList.IndexOf(values._Reason);
-            StartD.SelectedDate = Convert.ToDateTime(values._StartDate.Value.ToString());
-            EndD.SelectedDate = Convert.ToDateTime(values._EndDate.Value.ToString());
+            StartD.SelectedDate = Convert.ToDateTime(values._StartDate.ToString());
+            EndD.SelectedDate = Convert.ToDateTime(values._EndDate.ToString());
             CommentField.Text = values._Comment;
         }
         public void Submit(object sender, RoutedEventArgs e)
@@ -66,8 +66,8 @@ namespace Junior_CRM_Developer_Test
 
                 //Insert into DB
 
-                string sd = $"{NewInstance._StartDate.Value.Year}-{NewInstance._StartDate.Value.Month}-{NewInstance._StartDate.Value.Day}";
-                string ed = $"{NewInstance._EndDate.Value.Year}-{NewInstance._EndDate.Value.Month}-{NewInstance._EndDate.Value.Day}";
+                string sd = $"{NewInstance._StartDate.Year}-{NewInstance._StartDate.Month}-{NewInstance._StartDate.Day}";
+                string ed = $"{NewInstance._EndDate.Year}-{NewInstance._EndDate.Month}-{NewInstance._EndDate.Day}";
                 string query = $"INSERT INTO `leaverequest` (`employee`, `absence_reason`, `start_date`, `end_date`, `comment`) VALUES ({BaseUser.UserId}, '{NewInstance._Reason}', '{sd}', '{ed}', '{NewInstance._Comment}');";
                 var result = MainWindow.DBQuery(query);
 
@@ -78,7 +78,7 @@ namespace Junior_CRM_Developer_Test
                     MessageBox.Show("Something went wrong, check your data and try agian.\nIf the problem persists contact app administator.");
                     return;
                 }
-                NewInstance._Id = Convert.ToInt32(newId.Rows[0].ItemArray[0].ToString());
+                NewInstance._Id = Convert.ToInt32(newId.Rows[0].ItemArray[0].ToString()) - 1;
                 BaseUser.LeaveRequests.Add(NewInstance);
 
                 if (result.Item1)
@@ -103,9 +103,9 @@ namespace Junior_CRM_Developer_Test
                 BaseUser.LeaveRequests[id]._Comment = CommentField.Text;
                 var tempCopy = BaseUser.LeaveRequests[id];
                 //Update DB
-                string sd = $"{tempCopy._StartDate.Value.Year}-{tempCopy._StartDate.Value.Month}-{tempCopy._StartDate.Value.Day}";
-                string ed = $"{tempCopy._EndDate.Value.Year}-{tempCopy._EndDate.Value.Month}-{tempCopy._EndDate.Value.Day}";
-                string query = $"UPDATE `leaverequest` SET `absence_reason`='{tempCopy._Reason}',`start_date`='{sd}',`end_date`='{ed}',`comment`='{tempCopy._Comment}' WHERE 1";
+                string sd = $"{tempCopy._StartDate.Year}-{tempCopy._StartDate.Month}-{tempCopy._StartDate.Day}";
+                string ed = $"{tempCopy._EndDate.Year}-{tempCopy._EndDate.Month}-{tempCopy._EndDate.Day}";
+                string query = $"UPDATE `leaverequest` SET `absence_reason`='{tempCopy._Reason}',`start_date`='{sd}',`end_date`='{ed}',`comment`='{tempCopy._Comment}' WHERE id = {tempCopy._Id}";
                 var result = MainWindow.DBQuery(query);
                 if (result.Item1)
                 {

@@ -174,7 +174,7 @@ namespace Junior_CRM_Developer_Test.EmployeeView
 
                 newInstance._Id = Convert.ToInt32(result.Item2.Rows[0].ItemArray[0]);
 
-                query = $"INSERT INTO `employees` (`id`, `full_name`, `subdivision`, `position`, `people_partner`, `picture`) VALUES ({newInstance._Id},{newInstance._Name},{newInstance._Subdivision},{newInstance._Position},{(Partner.SelectedValue as ComboBoxItem).Tag},x'{HexDecPicture}')";
+                query = $"INSERT INTO `employees` (`id`, `full_name`, `subdivision`, `position`, `people_partner`, `picture`) VALUES ({newInstance._Id},'{newInstance._Name}','{newInstance._Subdivision}','{newInstance._Position}',{(Partner.SelectedValue as ComboBoxItem).Tag},x'{HexDecPicture}')";
                 result = MainWindow.DBQuery(query);
                 
                 if (result.Item1)

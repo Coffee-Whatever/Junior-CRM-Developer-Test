@@ -25,7 +25,7 @@ namespace Junior_CRM_Developer_Test.HRM
         public HREmployees()
         {
             InitializeComponent();
-
+            Employees.Clear();
             NameList.Clear();
 
             var query = "SELECT * FROM `employees`;";

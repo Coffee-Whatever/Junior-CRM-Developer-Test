@@ -32,10 +32,14 @@ namespace Junior_CRM_Developer_Test
         public static int ApproverId;
         public BaseUser()
         {
+            Projects.Clear();
+            LeaveRequests.Clear();
             InitializeComponent();
         }
         public BaseUser(int id)
         {
+            Projects.Clear();
+            LeaveRequests.Clear();
             InitializeComponent();
             UserId = id;
             GatherData(id);
@@ -60,8 +64,8 @@ namespace Junior_CRM_Developer_Test
                         project._StartDate = Convert.ToDateTime(row["start_date"]);
                         project._EndDate = Convert.ToDateTime(row["end_date"]);
                         project._Status = row["status"].ToString();
-                        project._Manager = row["comment"].ToString();
-                        project._Comment = row["Manager"].ToString();
+                        project._Manager = row["Manager"].ToString();
+                        project._Comment = row["comment"].ToString();
 
                         Projects.Add(project);
                     }
@@ -106,6 +110,10 @@ namespace Junior_CRM_Developer_Test
         }
         public void EditSelectedRequest(object sender, RoutedEventArgs e)
         {
+            if(LeaveDataGrid.SelectedItem == null)
+            {
+                return;
+            }
             var selectedObject = LeaveDataGrid.SelectedCells[0].Item as LeaveRequest;
             var Form = new LeaveRequestForm();
             Form.LoadData(selectedObject);

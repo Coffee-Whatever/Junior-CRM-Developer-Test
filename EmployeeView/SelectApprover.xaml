@@ -29,7 +29,7 @@
                 <Style
                     TargetType="{x:Type Button}">
                     <Setter 
-                        Property="Background" Value="Green"/>
+                        Property="Background" Value="{StaticResource YesBrush}"/>
                     <Setter 
                         Property="Template">
                         <Setter.Value>
@@ -50,7 +50,7 @@
                         <Trigger 
                             Property="IsMouseOver" Value="True">
                             <Setter 
-                                Property="Background" Value="LimeGreen"/>
+                                Property="Background" Value="{StaticResource YesHoverBrush}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>

@@ -8,6 +8,8 @@ using System.Windows.Documents.Serialization;
 using System.ComponentModel;
 using Junior_CRM_Developer_Test.Admin;
 using Junior_CRM_Developer_Test.HRM;
+using Junior_CRM_Developer_Test.PM;
+using Junior_CRM_Developer_Test.ManagerShared;
 
 namespace Junior_CRM_Developer_Test
 {
@@ -16,6 +18,7 @@ namespace Junior_CRM_Developer_Test
         public MainWindow()
         {
             InitializeComponent();
+            DBQuery("SET GLOBAL max_allowed_packet=33554432;");
         }
         private void SignInParsing(object sender, RoutedEventArgs e)
         {
@@ -97,7 +100,16 @@ namespace Junior_CRM_Developer_Test
                     break;
                 case "Pmanagement":
                     {
+                        PMMenu window = new PMMenu(Convert.ToInt32(dtable.Rows[0]["employee_id"]));
+                        window.ShowActivated = true;
+                        window.Closing += (object sender, CancelEventArgs e) =>
+                        {
+                            this.Show();
+                            this.Activate();
+                        };
+                        window.Show();
 
+                        this.Hide();
                     }
                     break;
                 case "full":
@@ -131,7 +143,7 @@ namespace Junior_CRM_Developer_Test
                 DataTable dtable = new DataTable();
                 dtb.Fill(dtable);
                 return (false, dtable);
-            }catch (Exception ex)
+            } catch (Exception ex)
             {
                 return (true, new DataTable());
             }

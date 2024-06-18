@@ -14,20 +14,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Junior_CRM_Developer_Test.HRM
+namespace Junior_CRM_Developer_Test.ManagerShared
 {
-    public partial class HRLeaveRequests : Window
+    public partial class LeaveRequestsDisplay : Window
     {
         public static ObservableCollection<LeaveRequest> LeaveRequestsHR = new ObservableCollection<LeaveRequest>();
         public static int UserId;
-        public HRLeaveRequests()
+        public LeaveRequestsDisplay()
         {
             InitializeComponent();
-        }
-        public HRLeaveRequests(int userId)
-        {
-            InitializeComponent();
-            UserId = userId;
+            LeaveRequestsHR.Clear();
 
             string query = $"SELECT * FROM `leaverequest`;";
             var result = MainWindow.DBQuery(query);
@@ -53,17 +49,6 @@ namespace Junior_CRM_Developer_Test.HRM
                 }
                 LeaveDataGrid.ItemsSource = LeaveRequestsHR;
             }
-        }
-        public void CreateNewLeaveRequest(object sender, RoutedEventArgs e)
-        {
-            var Form = new LeaveRequestForm();
-            Form.ShowActivated = true;
-            Form.Owner = this;
-            Form.Show();
-        }
-        public int indexOfId(int i)
-        {
-            return -1;
         }
     }
 }
