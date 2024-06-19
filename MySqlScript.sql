@@ -1,4 +1,4 @@
-﻿CREATE DATABASE crmtest;
+CREATE DATABASE crmtest;
 USE crmtest;
 SET GLOBAL max_allowed_packet=33554432;
 CREATE TABLE Employees (
@@ -60,13 +60,11 @@ CREATE TABLE Credentials (
 );
 
 INSERT INTO Employees VALUES
-(1, 'Patryk Klimkiewicz', 'Admin', 'Administrator', 'Active', 1, 26, '');
-INSERT INTO Employees VALUES
-(2, 'TestUser1', 'HR', 'HR Manager', 'Active', 1, 26, '');
-INSERT INTO Employees VALUES
-(3, 'TestUser2', 'Dev', 'Developer', 'Active', 2, 26, '');
-INSERT INTO Employees VALUES
-(4, 'TestUser3', 'Sales', 'Marketer', 'Active', 4, 26, '');
+(1, 'Patryk Klimkiewicz', 'Admin', 'Administrator', 'Active', 1, 26, ''),
+(2, 'TestUser1', 'HR', 'HR Manager', 'Active', 1, 26, ''),
+(3, 'TestUser2', 'Dev', 'Developer', 'Active', 2, 26, ''),
+(4, 'TestUser3', 'Sales', 'Marketer', 'Active', 4, 26, ''),
+(5, 'UserWithOutCredentials', 'HR', 'HR Manager', 'Active', 1, 26, '');
 
 INSERT INTO `credentials` VALUES
 (1, 1, 'admin', '0F2FD52805592D291CE45E932F85176274B003F8D1B9F297274F4326E9F40580', 'k!xkzf>odaaab<%m),o1', 'full'),
@@ -81,4 +79,7 @@ INSERT INTO `employeeprojectrelations`(`employeeId`, `projectId`)
 VALUES (1,1);
 
 INSERT INTO `leaverequest`(`employee`, `absence_reason`, `start_date`, `end_date`, `comment`) VALUES 
-(1, 'Holyday','2024-12-24','2025-01-02','Newyears and Christmas leave');
+(4, 'Holyday','2024-12-24','2025-01-02','Newyears and Christmas leave'),
+(5, 'Other','2024-12-21','2024-12-28','Other test leave');
+
+INSERT INTO `approvalrequest` (`approver`, `leave_request`) VALUES (2, 1), (3, 2);
