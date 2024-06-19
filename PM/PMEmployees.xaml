@@ -16,9 +16,14 @@
             HorizontalScrollBarVisibility="Disabled">
             <DataGrid
                 AutoGenerateColumns="False"
-                IsReadOnly="True"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="Column"
+                Background="{StaticResource PrimaryBrush}"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                IsReadOnly="True"
                 x:Name="EmployeesDataGrid">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding _Id}"/>

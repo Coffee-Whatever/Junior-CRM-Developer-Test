@@ -24,6 +24,9 @@ namespace Junior_CRM_Developer_Test.EmployeeView
         }
         private void Accept(object sender, RoutedEventArgs e)
         {
+            if(Comment.Text == null) {
+                Comment.Text = string.Empty;
+            }
             CommentText = Comment.Text;
             this.Close();
         }

@@ -121,9 +121,15 @@ namespace Junior_CRM_Developer_Test
                             this.Show();
                             this.Activate();
                         };
-                        window.Show();
-
-                        this.Hide();
+                        try
+                        {
+                            window.Show();
+                            this.Hide();
+                        }
+                        catch (Exception ex)
+                        {
+                            this.Show();
+                        }
                     }
                     break;
             }

@@ -81,6 +81,12 @@ namespace Junior_CRM_Developer_Test.HRM
         }
         private void ModifyEmployee(object sender, RoutedEventArgs e)
         {
+            if(EmployeesDataGrid.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a record to modify.");
+                return;
+            }
+
             EmployeeData window = new EmployeeData(EmployeesDataGrid.SelectedItem as Employee);
             window.ShowDialog();
 

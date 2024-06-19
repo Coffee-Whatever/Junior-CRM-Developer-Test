@@ -69,10 +69,11 @@ namespace Junior_CRM_Developer_Test.Admin
 
         private void CreateNewCredentials(object sender, RoutedEventArgs e)
         {
-            if (login.Text == null) return;
-            if(Id.SelectedItem == null) return;
-            if(password.Text == null) return;
-            if(AccessLevel.SelectedItem == null) return;
+            if (login.Text == null || Id.SelectedItem == null || password.Text == null || AccessLevel.SelectedItem == null)
+            {
+                MessageBox.Show("Please fill in the data to save.");
+                return;
+            }
 
             string Userlogin = login.Text;
             string salt = RandomNumberGenerator.GetString("1234567890!@#$%^&*()qwertyuiopasdfghjklzxcvbnm,.<>:;[]{}", 20);
@@ -90,6 +91,7 @@ namespace Junior_CRM_Developer_Test.Admin
             }
 
             MessageBox.Show("User credentials added correctly.");
+            Id.Items.Remove(Id.SelectedItem);
             AccessLevel.SelectedItem = null;
             Id.SelectedItem = null;
             login.Text = string.Empty;

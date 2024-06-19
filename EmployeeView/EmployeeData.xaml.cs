@@ -65,7 +65,7 @@ namespace Junior_CRM_Developer_Test.EmployeeView
             foreach(var sub in Partner.Items)
             {
                 var sub2 = sub as ComboBoxItem;
-                if(sub2.Content.ToString() == employee._Partner)
+                if(sub2.Content.ToString().Split(" | ")[0] == employee._Partner)
                 {
                    Partner.SelectedIndex = i;
                 }
@@ -141,17 +141,18 @@ namespace Junior_CRM_Developer_Test.EmployeeView
         }
         public void Save(object sender, RoutedEventArgs e)
         {
-            if (FEName.Text == null) return;
-            if (Subdivision.SelectedItem == null) return;
-            if (Position.SelectedItem == null) return;
-            if (Partner.SelectedItem == null) return;
+            if (FEName.Text == null || Subdivision.SelectedItem == null || Position.SelectedItem == null || Partner.SelectedItem == null)
+            {
+                MessageBox.Show("Please fill in the data to save.");
+                return;
+            }
 
             if (Modify)
             {
                 ModifiedEmployee._Name = FEName.Text;
                 ModifiedEmployee._Subdivision = (Subdivision.SelectedValue as ComboBoxItem).Content.ToString();
                 ModifiedEmployee._Position = (Position.SelectedValue as ComboBoxItem).Content.ToString();
-                ModifiedEmployee._Partner = (Partner.SelectedValue as ComboBoxItem).Content.ToString();
+                ModifiedEmployee._Partner = (Partner.SelectedValue as ComboBoxItem).Content.ToString().Split(" | ")[0];
 
                 var query = $"UPDATE `employees` " +
                     $"SET `full_name`='{ModifiedEmployee._Name}',`subdivision`='{ModifiedEmployee._Subdivision}',`position`='{ModifiedEmployee._Position}',`people_partner`={(Partner.SelectedValue as ComboBoxItem).Tag},`picture`=x'{HexDecPicture}' "+ 

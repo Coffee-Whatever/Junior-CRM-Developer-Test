@@ -177,7 +177,7 @@
                     BorderBrush="{x:Null}"
                     Foreground="{StaticResource TextBrush}"
                     Margin="5"
-                    Click="CancleRequest">
+                    Click="CancelRequest">
                     <Button.Style>
                         <Style
                             TargetType="{x:Type Button}">

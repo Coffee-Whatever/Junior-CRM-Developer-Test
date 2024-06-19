@@ -121,13 +121,17 @@ namespace Junior_CRM_Developer_Test.PM
         }
         private void Update(object sender, RoutedEventArgs e)
         {
-            if (Type.SelectedItem == null) return;
-            if (Manager.SelectedItem == null) return;
-            if (Status.SelectedItem == null) return;
-            if (StartDate.SelectedDate == null) return;
-            if (EndDate.SelectedDate == null) return;
+            if (Type.SelectedItem == null ||
+                Manager.SelectedItem == null ||
+                Status.SelectedItem == null ||
+                StartDate.SelectedDate == null ||
+                EndDate.SelectedDate == null)
+            {
+                MessageBox.Show("Please fill in the data to update.");
+                return;
+            }
 
-            if(isModified)
+            if (isModified)
             {
                 Project instance = copy;
                 instance._Type = (Type.SelectedItem as ComboBoxItem).Content.ToString();
@@ -191,6 +195,7 @@ namespace Junior_CRM_Developer_Test.PM
 
                 PMProjects.Projects.Add(instance);
             }
+            this.Close();
         }
         private void Cancel(object sender, RoutedEventArgs e)
         {

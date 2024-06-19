@@ -58,21 +58,16 @@ namespace Junior_CRM_Developer_Test.ManagerShared
         private void Accept(object sender, RoutedEventArgs e)
         {
             var selected = ARDataGrid.SelectedItem as ApprovalRequest;
-            if (selected == null) return;
-            if (selected._ApproveStatus == "Accepted") return;
-
-            CommentEntry commentEntry = new CommentEntry();
-            commentEntry.Closing += (object sender, CancelEventArgs e) =>
+            if (selected == null)
             {
-                this.Activate();
-            };
-            commentEntry.ShowDialog();
-
-            string comm = CommentEntry.CommentText;
-            if (comm == null)
+                MessageBox.Show("Please select a record to accept.");
+                return;
+            }
+            if (selected._ApproveStatus == "Accepted")
             {
                 return;
             }
+
             string query = $"START TRANSACTION;SET autocommit=0;";
             var result = MainWindow.DBQuery(query);
 
@@ -142,7 +137,6 @@ namespace Junior_CRM_Developer_Test.ManagerShared
                 return;
             }
             RequestsCollection[id]._ApproveStatus = "Accepted";
-            RequestsCollection[id]._Comment = comm;
 
             ARDataGrid.ItemsSource = null;
             ARDataGrid.ItemsSource = RequestsCollection;
@@ -152,7 +146,11 @@ namespace Junior_CRM_Developer_Test.ManagerShared
         private void Reject(object sender, RoutedEventArgs e)
         {
             var selected = ARDataGrid.SelectedItem as ApprovalRequest;
-            if (selected == null) return;
+            if (selected == null)
+            {
+                MessageBox.Show("Please select a record to reject.");
+                return;
+            }
             if (selected._ApproveStatus == "Rejected") return;
 
             CommentEntry commentEntry = new CommentEntry();

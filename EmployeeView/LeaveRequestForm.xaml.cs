@@ -55,9 +55,11 @@ namespace Junior_CRM_Developer_Test
         public void Submit(object sender, RoutedEventArgs e)
         {
             int id = (this.Owner as BaseUser).indexOfId(index);
-            if (ReasonFA.SelectedItem == null) return;
-            if (StartD.SelectedDate == null) return;
-            if (EndD.SelectedDate == null) return;
+            if (ReasonFA.SelectedItem == null || StartD.SelectedDate == null || EndD.SelectedDate == null)
+            {
+                MessageBox.Show("Please fill in the data to submit.");
+                return;
+            }
 
             if (id == -1)
             {
@@ -100,7 +102,7 @@ namespace Junior_CRM_Developer_Test
             }
             else
             {
-                BaseUser.LeaveRequests[id]._Reason = ReasonFA.SelectedValue.ToString();
+                BaseUser.LeaveRequests[id]._Reason = (ReasonFA.SelectedItem as ComboBoxItem).Content.ToString();
                 BaseUser.LeaveRequests[id]._StartDate = StartD.SelectedDate.Value;
                 BaseUser.LeaveRequests[id]._EndDate = EndD.SelectedDate.Value;
                 BaseUser.LeaveRequests[id]._Comment = CommentField.Text;

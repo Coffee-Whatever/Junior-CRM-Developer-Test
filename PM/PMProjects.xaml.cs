@@ -66,7 +66,11 @@ namespace Junior_CRM_Developer_Test.PM
         public void Update(object sender, RoutedEventArgs e)
         {
             var selected = ProjectsDataGrid.SelectedItem as Project;
-            if (selected == null) return;
+            if (selected == null)
+            {
+                MessageBox.Show("Please select a record to update.");
+                return;
+            }
 
             ProjectDetails window = new ProjectDetails(selected);
             window.Owner = this;
@@ -83,7 +87,11 @@ namespace Junior_CRM_Developer_Test.PM
         {
             var selected = ProjectsDataGrid.SelectedItem as Project;
 
-            if (selected == null) return;
+            if (selected == null)
+            {
+                MessageBox.Show("Please select a record to deactivate.");
+                return;
+            }
             if (selected._Status == "Inactive") return;
 
             int projectId = selected._Id;

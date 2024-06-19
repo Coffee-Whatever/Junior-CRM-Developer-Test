@@ -36,7 +36,11 @@ namespace Junior_CRM_Developer_Test
         }
         public void Accept(object sender, RoutedEventArgs e)
         {
-            if (Approvers.SelectedItem == null) return;
+            if (Approvers.SelectedItem == null)
+            {
+                MessageBox.Show("Please select an approver to save.");
+                return;
+            }
             int index = Approvers.SelectedIndex;
             if(index == -1)
             {

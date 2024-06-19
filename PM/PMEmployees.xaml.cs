@@ -81,7 +81,11 @@ namespace Junior_CRM_Developer_Test.PM
         }
         private void AddToProject(object sender, RoutedEventArgs e)
         {
-            if (EmployeesDataGrid.SelectedItem == null) return;
+            if (EmployeesDataGrid.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a project to assign to.");
+                return;
+            }
 
             int id = (EmployeesDataGrid.SelectedItem as Employee)._Id;
 

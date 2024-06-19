@@ -112,6 +112,7 @@ namespace Junior_CRM_Developer_Test
         {
             if(LeaveDataGrid.SelectedItem == null)
             {
+                MessageBox.Show("Please select a record to edit.");
                 return;
             }
 
@@ -122,12 +123,17 @@ namespace Junior_CRM_Developer_Test
             Form.LoadData(selectedObject);
             Form.ShowActivated = true;
             Form.Owner = this;
-            Form.Show();
+            Form.ShowDialog();
+
+            LeaveDataGrid.ItemsSource = null;
+            LeaveDataGrid.ItemsSource = LeaveRequests;
+            LeaveDataGrid.UpdateLayout();
         }
-        public void CancleRequest(object sender, RoutedEventArgs e)
+        public void CancelRequest(object sender, RoutedEventArgs e)
         {
             if (LeaveDataGrid.SelectedItem == null)
             {
+                MessageBox.Show("Please select a record to cancel.");
                 return;
             }
             var selectedObject = LeaveDataGrid.SelectedItem as LeaveRequest;
@@ -171,6 +177,7 @@ namespace Junior_CRM_Developer_Test
         {
             if (LeaveDataGrid.SelectedItem == null)
             {
+                MessageBox.Show("Please select a record to submit.");
                 return;
             }
 

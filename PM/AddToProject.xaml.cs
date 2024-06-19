@@ -46,7 +46,11 @@ namespace Junior_CRM_Developer_Test.PM
         }
         public void Save(object sender, EventArgs e)
         {
-            if (Projects.SelectedItem == null) return;
+            if (Projects.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a project to save.");
+                return;
+            }
 
             int projectId = Convert.ToInt32((Projects.SelectedItem as ComboBoxItem).Tag);
             string query = $"INSERT INTO `employeeprojectrelations` (`employeeId`, `projectId`) VALUES ({employeeId},{projectId});";
