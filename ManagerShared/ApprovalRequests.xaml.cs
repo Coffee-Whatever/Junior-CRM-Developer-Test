@@ -158,7 +158,7 @@ namespace Junior_CRM_Developer_Test.ManagerShared
             {
                 this.Activate();
             };
-
+            commentEntry.ShowDialog();
             string comm = CommentEntry.CommentText;
             if (comm == null)
             {

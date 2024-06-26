@@ -62,7 +62,7 @@
                 HorizontalAlignment="Center"
                 Foreground="{StaticResource TextBrush}"
                 FontSize="20"
-                Text="Leaves List"/>
+                Text="Leave Request List"/>
             <TextBlock/>
             <Border 
             Margin="15,10,10,10"
